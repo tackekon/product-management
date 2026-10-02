@@ -1,4 +1,6 @@
+// Xử lý Front End Admin, folder public là FE.
 // Button Status
+// Class tự định nghĩa dùng ngoặc vuông [button-status]
 const buttonStatus = document.querySelectorAll("[button-status]");
 if(buttonStatus.length > 0){
   let url = new URL(window.location.href);
@@ -26,11 +28,14 @@ if (formSearch) {
   formSearch.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    // lấy keyword trong form search
     const keyword = e.target.elements.keyword.value;
     //console.log(e.target.elements.keyword.value);
     if(keyword) {
+        //set keyword vào url
         url.searchParams.set("keyword", keyword);
       }   else {
+        //xoá keyword trên url
         url.searchParams.delete("keyword");
       }
 
