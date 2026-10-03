@@ -12,7 +12,6 @@ module.exports.index = async (req, res) => {
   
   let find = {
     deleted: false
-
   };
   
   if (req.query.status) {
@@ -47,3 +46,18 @@ module.exports.index = async (req, res) => {
     pagination: objectPagination
   });
 }
+
+// [GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  const status = req.params.status;
+  const id = req.params.id;
+
+  await Product.updateOne({ _id: id },{ status: status });
+
+  // Express 5 no longer supports the magic string back in the res.redirect() and res.location() methods. 
+  // Instead, use the req.get('Referrer') || '/' value to redirect back to the previous page. In Express 4, the res.redirect('back') and res.location('back') methods were deprecated.
+  // refer to https://expressjs.com/en/guide/migrating-5/
+
+  //res.redirect("back");
+  res.redirect(req.get('Referrer') || '/');
+};
