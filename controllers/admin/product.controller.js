@@ -100,6 +100,8 @@ module.exports.changeMulti = async (req, res) => {
         await Product.updateOne ({ _id: id },{
           position: position
         });
+
+        req.flash("success",`Đã đổi vị trí thành công ${ids.length} sản phẩm!`);
       }
       break;
     default:
@@ -121,6 +123,6 @@ module.exports.deleteItem = async (req, res) => {
   });
 
   req.flash("success",`Đã xoá thành công sản phẩm!`);
-  
+
   res.redirect(req.get('Referrer') || '/');
 };
