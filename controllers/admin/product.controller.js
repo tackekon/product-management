@@ -69,6 +69,7 @@ module.exports.changeMulti = async (req, res) => {
 
   switch (type) {
     case "active":
+      // ref https://stackoverflow.com/questions/20096885/update-multiple-documents-by-id-set-mongoose
       await Product.updateMany({ _id: { $in: ids }}, { status: "active" } );
       break;
     case "inactive":
@@ -78,5 +79,18 @@ module.exports.changeMulti = async (req, res) => {
       break;
   }
 
+  // can NOT use in Express 5
+  //res.redirect("back"); 
+  res.redirect(req.get('Referrer') || '/');
+};
+
+// deleteItem
+// [DELETE] /admin/products/delete/:id
+module.exports.deleteItem = async (req, res) => {
+  const id = req.params.id;
+
+  await Product.deleteOne({ _id: id });
+
+  //res.redirect("back");
   res.redirect(req.get('Referrer') || '/');
 };
