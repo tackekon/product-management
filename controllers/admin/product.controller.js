@@ -67,10 +67,19 @@ module.exports.changeMulti = async (req, res) => {
   switch (type) {
     case "active":
       // ref https://stackoverflow.com/questions/20096885/update-multiple-documents-by-id-set-mongoose
-      await Product.updateMany({ _id: { $in: ids }}, { status: "active" } );
+      await Product.updateMany({ _id: { $in: ids }}, { status: "active" });
       break;
     case "inactive":
-      await Product.updateMany({ _id: { $in: ids }}, { status: "inactive" } );
+      await Product.updateMany({ _id: { $in: ids }}, { status: "inactive" });
+      break;
+    case "delete-all":
+      await Product.updateMany(
+        { _id: { $in: ids }}, 
+        { 
+          deleted: true,
+          deletedAt: new Date()
+        }
+      );
       break;
     default:
       break;
