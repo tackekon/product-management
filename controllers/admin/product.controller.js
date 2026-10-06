@@ -53,6 +53,8 @@ module.exports.changeStatus = async (req, res) => {
   const id = req.params.id;
 
   await Product.updateOne({ _id: id },{ status: status });
+  
+  req.flash("success","Cập nhật trạng thái thành công!");
 
   // Express 5 no longer supports the magic string back in the res.redirect() and res.location() methods. 
   // Instead, use the req.get('Referrer') || '/' value to redirect back to the previous page. In Express 4, the res.redirect('back') and res.location('back') methods were deprecated.
@@ -71,9 +73,11 @@ module.exports.changeMulti = async (req, res) => {
     case "active":
       // ref https://stackoverflow.com/questions/20096885/update-multiple-documents-by-id-set-mongoose
       await Product.updateMany({ _id: { $in: ids }}, { status: "active" });
+      req.flash("success",`Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
       break;
     case "inactive":
       await Product.updateMany({ _id: { $in: ids }}, { status: "inactive" });
+      req.flash("success",`Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
       break;
     case "delete-all":
       await Product.updateMany(
@@ -95,16 +99,6 @@ module.exports.changeMulti = async (req, res) => {
           position: position
         });
       }
-
-
-
-      // await Product.updateMany(
-      //   { _id: { $in: ids }}, 
-      //   { 
-      //     deleted: true,
-      //     deletedAt: new Date()
-      //   }
-      // );
       break;
     default:
       break;
