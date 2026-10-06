@@ -1,13 +1,10 @@
 const Product = require("../../models/product.model");
-
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination.js");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
-  // console.log(req.query.status);
-
   const filterStatus = filterStatusHelper(req.query);
   
   let find = {
@@ -79,8 +76,6 @@ module.exports.changeMulti = async (req, res) => {
       break;
   }
 
-  // can NOT use in Express 5
-  //res.redirect("back"); 
   res.redirect(req.get('Referrer') || '/');
 };
 
@@ -89,8 +84,11 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
-  await Product.deleteOne({ _id: id });
+  // await Product.deleteOne({ _id: id });
+  await Product.updateOne({ _id: id },{
+    deleted: true,
+    deletedAt: new Date() 
+  });
 
-  //res.redirect("back");
   res.redirect(req.get('Referrer') || '/');
 };
