@@ -5,7 +5,7 @@ module.exports.index = async (req, res) => {
   const products = await Product.find({
       status: "active",
       deleted: false
-  });
+  }).sort({position: "desc" });
 
   // hàm map phải có return, nếu không có return thì sẽ trả về undefined
   const newProducts = products.map(item => {
