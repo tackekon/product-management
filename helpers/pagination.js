@@ -7,7 +7,7 @@ module.exports = (objectPagination, query, countProducts) => {
   objectPagination.skip = (objectPagination.currentPage - 1)* objectPagination.limitItem;
   
   // tổng số trang (làm tròn lên) = tổng sp / số lượng phần tử mỗi trang
-  const totalPage = Math.ceil(countProducts/objectPagination.limitItem);
+  const totalPage = Math.ceil(countProducts/objectPagination.limitItems);
   objectPagination.totalPage = totalPage;
 
   return objectPagination;
