@@ -100,3 +100,17 @@ module.exports.permissionsPatch = async (req, res) => {
   req.flash("success", "Cập nhật phân quyền thành công!")
   res.redirect(req.get('Referrer') || '/');
 }
+// [DELETE] /admin/roles/delete/:id
+module.exports.deleteRole = async (req, res) => {
+   const id = req.params.id;
+  
+  // await Product.deleteOne({ _id: id });
+  await Role.updateOne({ _id: id },{
+    deleted: true,
+    deletedAt: new Date() 
+  });
+  
+  req.flash("success",`Đã xoá thành công.`);
+  
+  res.redirect(req.get('Referrer') || '/');
+};
