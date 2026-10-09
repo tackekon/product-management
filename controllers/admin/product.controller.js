@@ -1,5 +1,6 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
+const Account = require("../../models/account.model");
 
 const systemConfig = require("../../config/system.js");
 
@@ -53,6 +54,16 @@ module.exports.index = async (req, res) => {
   .limit(objectPagination.limitItems)
   .skip(objectPagination.skip);
 
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createdBy.account_id
+    });
+    if(user) {
+      product.accountFullName = user.fullName;
+    }
+  }
+
+
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
     products: products,
@@ -99,7 +110,11 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids }}, 
         { 
           deleted: true,
-          deletedAt: new Date()
+          //deletedAt: new Date() 
+          deletedBy: { 
+            account_id : res.locals.user.id,
+            deletedAt: new Date() 
+          }
         }
       );
       req.flash("success",`Đã xoá thành công ${ids.length} sản phẩm!`);
@@ -127,15 +142,20 @@ module.exports.changeMulti = async (req, res) => {
   res.redirect(req.get('Referrer') || '/');
 };
 
-// deleteItem
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
   // await Product.deleteOne({ _id: id });
-  await Product.updateOne({ _id: id },{
+  await Product.updateOne(
+    { _id: id },
+    {
     deleted: true,
-    deletedAt: new Date() 
+    //deletedAt: new Date() 
+    deletedBy: { 
+      account_id : res.locals.user.id,
+      deletedAt: new Date() 
+    }
   });
 
   req.flash("success",`Đã xoá thành công sản phẩm!`);
@@ -160,7 +180,6 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -178,6 +197,7 @@ module.exports.createPost = async (req, res) => {
   //   req.body.thumbnail = `/uploads/${req.file.filename}`;
   // }
 
+  req.body.createdBy = { account_id: res.locals.user.id };
   
   const product = new Product(req.body);
   await product.save();
