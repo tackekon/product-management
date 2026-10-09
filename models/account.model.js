@@ -3,7 +3,7 @@ const generate = require("../helpers/generate");
 
 const accountSchema = new mongoose.Schema(
   {
-    fullname: String,
+    fullName: String,
     email: String,
     password: String,
     token: {
@@ -26,6 +26,6 @@ const accountSchema = new mongoose.Schema(
 );
 
 // Tham số thứ 3 là tên collection trong database, nếu không có tham số này thì mongoose sẽ tự động chuyển tên model sang dạng số nhiều và viết thường để làm tên collection
-const Account = mongoose.model('Account', productSchema, "accounts");
+const Account = mongoose.model('Account', accountSchema, "accounts");
 
 module.exports = Account;
