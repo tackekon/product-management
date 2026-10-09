@@ -6,3 +6,9 @@ header.header
           a(href="/admin/dashboard" class="text-decoration-none") ADMIN
 
       .col-9
+        //- Bootstrap 5 không dùng "text-right"
+        div(class="text-end")
+          a(
+            href=`${prefixAdmin}/auth/logout`
+            class="btn btn-danger btn-sm"
+          ) Đăng xuất
