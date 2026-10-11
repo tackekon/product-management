@@ -10,12 +10,22 @@ module.exports.index = async (req, res) => {
     status: "active"
   }).limit(6);
 
-  const newProducts = productHelper.priceNewProducts(productsFeatured);
-  // END Lấy ra sản phẩm nổi bật 
+  const newProductsFeatured = productHelper.priceNewProducts(productsFeatured);
+  // END Lấy ra sản phẩm nổi bật
+
+  // Lấy ra sản phẩm mới nhất
+   const productsNew = await Product.find({
+    deleted: false,
+    status: "active"
+  }).sort({ position: "desc" }).limit(6);
+  
+  const newProductsNew = productHelper.priceNewProducts(productsNew);
+  // END Lấy ra sản phẩm mới nhất
 
   res.render("client/pages/home/index", {
     pageTitle: "Trang chủ",
-    productsFeatured: newProducts
+    productsFeatured: newProductsFeatured,
+    productsNew: newProductsNew
     
   });
 }
