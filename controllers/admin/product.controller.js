@@ -215,7 +215,7 @@ module.exports.createPost = async (req, res) => {
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-  // console.log(req.body);
+
   if (req.body.position == "") {
     // Hàm count bị gỡ bỏ trong các phiên bản Mongoose ODM mới, từ V6.x
     // const countProducts = await Product.count ();
@@ -252,7 +252,6 @@ module.exports.edit = async (req, res) => {
     });
     const newCategory = createTreeHelper.tree(category);
 
-
     res.render("admin/pages/products/edit", {
       pageTitle: "Chỉnh sửa sản phẩm",
       product: product,
@@ -273,11 +272,18 @@ module.exports.editPatch = async (req, res) => {
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
   req.body.position = parseInt(req.body.position);
- 
+  
+  /* Route dùng multer() mặc định nên file nằm trong bộ nhớ và không có req.file.filename. 
+  Middleware Cloudinary đã gán URL ảnh mới vào req.body.thumbnail, 
+  nhưng controller lại ghi đè URL đó thành /uploads/undefined. */
 
-  if(req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
+  // if(req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  //   console.log(req.body.thumbnail);
+  //   console.log(req.file);
+
+  // }
+
 
   try {
     const updatedBy = {

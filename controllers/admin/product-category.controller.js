@@ -25,11 +25,9 @@ module.exports.create = async (req, res) => {
     deleted: false
   };
 
-
   const records = await ProductCategory.find(find);
   const newRecords = createTreeHelper.tree(records);
   
-
   res.render("admin/pages/products-category/create", {
     pageTitle: "Tạo danh mục sản phẩm",
     records: newRecords
@@ -38,6 +36,14 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
+  // const permissions = res.locals.role.permissions;
+  // if(permissions.includes("products-category_create")){
+  //   console.log("Có quyền");
+  // } else {
+  //   res.send("403");
+  //   return;
+  // }
+
   if (req.body.position == "") {
     // const countProducts = await Product.count ();
     const count = await ProductCategory.countDocuments ();

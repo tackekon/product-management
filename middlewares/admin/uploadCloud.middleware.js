@@ -2,11 +2,11 @@ const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 
 // Configuration cloudinary
-  cloudinary.config({ 
-      cloud_name: process.env.CLOUD_NAME, 
-      api_key: process.env.CLOUD_KEY, 
-      api_secret: process.env.CLOUD_SECRET
-  });
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.CLOUD_KEY, 
+  api_secret: process.env.CLOUD_SECRET
+});
 // End Configuration cloudinary
 
 module.exports.upload =  (req, res, next) => {
