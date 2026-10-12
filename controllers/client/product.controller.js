@@ -40,7 +40,6 @@ module.exports.detail = async (req, res) => {
       }
       
       product.priceNew = productHelper.priceNewProduct(product);
-      console.log(product.priceNew);
 
       res.render("client/pages/products/detail", {
         pageTitle: product.title,

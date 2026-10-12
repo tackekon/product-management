@@ -40,7 +40,7 @@ module.exports.createPost = async (req, res) => {
   // if(permissions.includes("products-category_create")){
   //   console.log("Có quyền");
   // } else {
-  //   res.send("403");
+  //   res.send("Error 403");
   //   return;
   // }
 
