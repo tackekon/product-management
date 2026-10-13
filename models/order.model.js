@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema(
       {
         product_id: String,
         price: Number,
-        discountPercantage: Number,
+        discountPercentage: Number,
         quantity: Number
       }
     ],
