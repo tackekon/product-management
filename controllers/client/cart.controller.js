@@ -80,7 +80,8 @@ module.exports.addPost = async (req, res) => {
 
 
   req.flash("success","Đã thêm sản phẩm vào giỏ hàng.");
-
+  
+  //res.redirect("back");
   res.redirect(req.get('Referrer') || '/');
 }
 
@@ -97,6 +98,28 @@ module.exports.delete = async (req, res) => {
 
 
   req.flash("success", "Đã xoá sản phẩm khỏi giỏ hàng.");
+
+  //res.redirect("back");
+  res.redirect(req.get('Referrer') || '/');
+}
+
+// [GET] /cart/update/:productId/:quantity
+module.exports.update = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const productId = req.params.productId;
+  const quantity = req.params.quantity;
+
+  await Cart.updateOne({
+      _id: cartId,
+      "products.product_id": productId,
+    },
+    {
+      $set: {
+        "products.$.quantity": quantity,
+      }
+  });
+
+  req.flash("success", "Cập nhật số lượng thành công.");
 
   //res.redirect("back");
   res.redirect(req.get('Referrer') || '/');
