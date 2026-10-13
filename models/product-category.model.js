@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slug = require('mongoose-slug-updater');
+const mongoose = require("mongoose");
+const slug = require("mongoose-slug-updater");
 
 mongoose.plugin(slug);
 
