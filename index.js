@@ -51,6 +51,12 @@ app.use(express.static(`${__dirname}/public`));
 routeAdmin(app);
 route(app);
 
+app.get("/{*path}", (req, res) => {
+  res.status(404).render("client/pages/errors/404", {
+    pageTitle: "404 Not Found"
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
