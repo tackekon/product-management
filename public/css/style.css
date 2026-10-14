@@ -280,7 +280,7 @@
 .chat .inner-body {
   padding: 10px;
   height: 450px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .chat .inner-body .inner-name {
@@ -300,6 +300,12 @@
   margin-left: auto;
   background: #FE5DA3;
   color: #fff;
+}
+
+.chat .inner-incoming .inner-content {
+  margin-right: auto;
+  background: #e0d4da;
+  color: #000000;
 }
 
 .chat .inner-body .inner-images img {
