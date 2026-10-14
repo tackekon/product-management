@@ -2,11 +2,12 @@ const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const moment = require('moment');
+const http = require('http');
+const { Server } = require("socket.io");
 
 
 require('dotenv').config();
@@ -22,6 +23,14 @@ const route = require('./routes/client/index.route');
 
 const app = express();
 const port = process.env.PORT;
+
+// SocketIO
+const server = http.createServer(app);
+const io = new Server(server);
+io.on('connection', (socket) => {
+  console.log('a user connected', socket.id);
+});
+// END SocketIO
 
 app.use(methodOverride("_method"));
 
@@ -58,6 +67,6 @@ app.get("/{*path}", (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+server.listen(port, () => {
+  console.log(`Server is listening on http://localhost:${port}`);
 });
