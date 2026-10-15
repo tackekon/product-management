@@ -7,8 +7,6 @@ module.exports.cartId = async (req, res, next) => {
     const cart = new Cart();
     await cart.save();
 
-    console.log(cart);
-
     const expiresCookie = 365 * 24 * 60 * 60 * 1000;
 
     res.cookie("cartId", cart.id ,  {
@@ -21,7 +19,7 @@ module.exports.cartId = async (req, res, next) => {
     });
 
     const totalQuantity = cart.products.reduce((sum, item) => sum + item.quantity , 0);
-    //console.log(totalQuantity);
+    
     cart.totalQuantity = totalQuantity;
 
     res.locals.miniCart = cart;

@@ -10,8 +10,8 @@ import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm
 //   multiple: true,
 //   maxFileCount: 6
 // });
-//- file-upload-with-preview
 
+//- file-upload-with-preview
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
   multiple: true,
   maxFileCount: 6
