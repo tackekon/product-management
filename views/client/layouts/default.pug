@@ -38,6 +38,15 @@ html
     //- End emoji-picker-element
 
     //- file-upload-with-preview
+    // Đường dẫn không ghi phiên bản:
+    // https://unpkg.com/file-upload-with-preview/dist/index.js
+    // sẽ lấy phiên bản mới nhất của package; khi kiểm tra thì đó là v6.1.2. Vì không ghim phiên bản, URL có thể trỏ sang phiên bản khác khi package được cập nhật.
+    // Với v6, file dist/index.js dùng dạng ES module. Nó không tạo biến global để gọi FileUploadWithPreview.FileUploadWithPreview(...). Hãy dùng module import và gọi constructor trực tiếp:
+    // import { FileUploadWithPreview } from "https://cdn.jsdelivr.net/npm/file-upload-with-preview@6.1.2/+esm";
+    // const upload = new FileUploadWithPreview("upload-images", {
+    //   multiple: true,
+    //   maxFileCount: 6
+    // });
     //script(src="https://unpkg.com/file-upload-with-preview/dist/index.js")
     script(src="https://unpkg.com/file-upload-with-preview@5.0.8/dist/file-upload-with-preview.iife.js")
     
