@@ -1,5 +1,21 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 
+// Đường dẫn không ghi phiên bản:
+// https://unpkg.com/file-upload-with-preview/dist/index.js
+// sẽ lấy phiên bản mới nhất của package; khi kiểm tra thì đó là v6.1.2. Vì không ghim phiên bản, URL có thể trỏ sang phiên bản khác khi package được cập nhật.
+// Với v6, file dist/index.js dùng dạng ES module. Nó không tạo biến global để gọi FileUploadWithPreview.FileUploadWithPreview(...). Hãy dùng module import và gọi constructor trực tiếp:
+// import { FileUploadWithPreview } from "https://cdn.jsdelivr.net/npm/file-upload-with-preview@6.1.2/+esm";
+// const upload = new FileUploadWithPreview("upload-images", {
+//   multiple: true,
+//   maxFileCount: 6
+// });
+//- file-upload-with-preview
+
+const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
+  multiple: true,
+  maxFileCount: 6
+});
+//- End file-upload-with-preview
 
 // CLIENT_SEND_MESSAGE
 const formSendData = document.querySelector(".chat .inner-form");
@@ -7,9 +23,16 @@ if (formSendData) {
   formSendData.addEventListener("submit" , (e) => {
     e.preventDefault();
     const content = e.target.elements.content.value;
-    if (content) {
-      socket.emit("CLIENT_SEND_MESSAGE", content);
+    const images = upload.cachedFileArray;
+
+
+    if (content || images.length > 0 ) {
+      socket.emit("CLIENT_SEND_MESSAGE", {
+        content: content,
+        images: images
+      });
       e.target.elements.content.value = "";
+      upload.resetPreviewPanel(); // clear all selected images
       socket.emit("CLIENT_SEND_TYPING", "hidden");
     }
   
@@ -25,6 +48,9 @@ socket.on("SERVER_RETURN_MESSAGE", (data)=> {
 
   const div =  document.createElement("div");
   let htmlFullName = "";
+  let htmlContent = "";
+  let htmlImages = "";
+
 
   if(myID == data.userId) {
     div.classList.add("inner-outgoing");
@@ -33,14 +59,31 @@ socket.on("SERVER_RETURN_MESSAGE", (data)=> {
     div.classList.add("inner-incoming");
   }
 
+  if(data.content) {
+    htmlContent = `
+      <div class="inner-content">${data.content}</div>
+    `;
+  }
+
+  if(data.images.length > 0) {
+    htmlImages += `<div class="inner-images">`;
+
+    for (const image of data.images) {
+      htmlImages += `<img src=${image}>`;
+    }
+
+    htmlImages += `</div>`;
+  }
+
   div.innerHTML = `
     ${htmlFullName}
-    <div class="inner-content">${data.content}</div>
+    ${htmlContent}
+    ${htmlImages}
   `;
 
   body.insertBefore(div, boxTyping);
 
-  body.scrollTop = bodyChat.scrollHeight;
+  body.scrollTop = body.scrollHeight;
 
 });
 // End SERVER_RETURN_MESSAGE
