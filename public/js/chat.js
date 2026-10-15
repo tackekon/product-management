@@ -1,9 +1,10 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 
-// Đường dẫn không ghi phiên bản:
-// https://unpkg.com/file-upload-with-preview/dist/index.js
-// sẽ lấy phiên bản mới nhất của package; khi kiểm tra thì đó là v6.1.2. Vì không ghim phiên bản, URL có thể trỏ sang phiên bản khác khi package được cập nhật.
+// Đường dẫn không ghi phiên bản https://unpkg.com/file-upload-with-preview/dist/index.js
+// sẽ lấy phiên bản mới nhất của package; khi kiểm tra thì đó là v6.1.2. 
+// Vì không ghim phiên bản, URL có thể trỏ sang phiên bản khác khi package được cập nhật.
 // Với v6, file dist/index.js dùng dạng ES module. Nó không tạo biến global để gọi FileUploadWithPreview.FileUploadWithPreview(...). Hãy dùng module import và gọi constructor trực tiếp:
+
 // import { FileUploadWithPreview } from "https://cdn.jsdelivr.net/npm/file-upload-with-preview@6.1.2/+esm";
 // const upload = new FileUploadWithPreview("upload-images", {
 //   multiple: true,
@@ -84,6 +85,9 @@ socket.on("SERVER_RETURN_MESSAGE", (data)=> {
   body.insertBefore(div, boxTyping);
 
   body.scrollTop = body.scrollHeight;
+
+  // Preview Images
+  const gallery = new Viewer(div);
 
 });
 // End SERVER_RETURN_MESSAGE
@@ -189,3 +193,10 @@ if (elementListTyping) {
 }
 
 // End SERVER_RETURN_TYPING
+
+// Preview Full Image
+const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
+if(bodyChatPreviewImage) {
+  const gallery = new Viewer(bodyChatPreviewImage);
+}
+// End Preview Full Image
