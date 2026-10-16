@@ -10,6 +10,9 @@ module.exports.requireAuth = async (req, res, next) => {
     } 
     else {
       res.locals.user = user;
+
+      
+
       next();
     }
   }

@@ -20,6 +20,7 @@ module.exports = (app) => {
   app.use(userMiddleware.infoUser);
   app.use(settingMiddleware.settingGeneral);
 
+
   app.use("/", homeRoutes);
   
   app.use("/products", productRoutes);
