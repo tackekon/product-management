@@ -35,6 +35,16 @@ module.exports = (res) => {
         });
       }
 
+      // Lấy ra độ dài acceptFriends của B và trả về cho B
+      const infoUserB = await User.findOne({
+        _id: userId
+      });
+      const lengthAcceptFriends = infoUserB.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriends
+      });
 
     });
 
@@ -134,7 +144,6 @@ module.exports = (res) => {
           },
           $pull: {acceptFriends: userId } 
         });
-        console.log("hehehee");
       }
 
       // Thêm {user_id, room_chat_id} của B vào friendList của A
