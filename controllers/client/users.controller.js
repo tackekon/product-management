@@ -19,12 +19,16 @@ module.exports.notFriend = async (req, res) => {
   // mảng chứa danh sách acceptFriends
   const acceptFriends = myUser.acceptFriends;
 
+  const friendList = myUser.friendList;
+  const friendListId = friendList.map(item => item.user_id);
+
   // chỉ lấy user theo điều kiện (không phải user locals và không nằm trong mảng requestFriends và acceptFriends)
   const users = await User.find({
     $and: [
       { _id: { $ne: userId } }, // not equal, không lấy chính user đó
       { _id: { $nin: requestFriends } }, // not in
-      { _id: { $nin: acceptFriends } } // not in
+      { _id: { $nin: acceptFriends } },
+      { _id: { $nin: friendListId } } 
     ],
     status: "active",
     deleted: false
