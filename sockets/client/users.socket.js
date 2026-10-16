@@ -10,11 +10,11 @@ module.exports = (res) => {
       // console.log(userId); // Id của B
 
       // Thêm id của A vào acceptFriends của B
-      const exitUserAinB = await User.findOne({
+      const existIdAinB = await User.findOne({
         _id: userId,
         acceptFriends: myUserId
       });
-      if(!exitUserAinB) {
+      if(!existIdAinB) {
         await User.updateOne({
           _id: userId
         }, {
@@ -23,11 +23,11 @@ module.exports = (res) => {
       }
 
       // Thêm id của B vào requestFriends của A
-      const exitUserBinA = await User.findOne({
+      const existIdBinA = await User.findOne({
         _id: myUserId,
         requestFriends: userId
       });
-      if(!exitUserBinA) {
+      if(!existIdBinA) {
         await User.updateOne({
           _id: myUserId
         }, {
@@ -46,11 +46,11 @@ module.exports = (res) => {
       // console.log(userId); // Id của B
 
       // Xoá id của A trong acceptFriends của B
-      const exitUserAinB = await User.findOne({
+      const existIdAinB = await User.findOne({
         _id: userId,
         acceptFriends: myUserId
       });
-      if(exitUserAinB) {
+      if(existIdAinB) {
         await User.updateOne({
           _id: userId
         }, {
@@ -59,11 +59,11 @@ module.exports = (res) => {
       }
 
       // Xoá id của B trong requestFriends của A
-      const exitUserBinA = await User.findOne({
+      const existIdBinA = await User.findOne({
         _id: myUserId,
         requestFriends: userId
       });
-      if(exitUserBinA) {
+      if(existIdBinA) {
         await User.updateOne({
           _id: myUserId
         }, {
@@ -80,25 +80,26 @@ module.exports = (res) => {
       // console.log(userId); // Id của A
 
       // Xoá id của A trong acceptFriends của B
-      const exitUserAinB = await User.findOne({
+      const existIdAinB = await User.findOne({
         _id: myUserId,
         acceptFriends: userId
       });
-      if(exitUserAinB) {
+
+      if(existIdAinB) {
         await User.updateOne({
           _id: myUserId
         }, {
-          $pull: {acceptFriends: userId } // pull là xoá 
+          $pull: {acceptFriends: userId } 
         });
       }
 
       // Xoá id của B trong requestFriends của A
-      const exitUserBinA = await User.findOne({
+      const existIdBinA = await User.findOne({
         _id: userId,
         requestFriends: myUserId
       });
-      
-      if(exitUserBinA) {
+
+      if(existIdBinA) {
         await User.updateOne({
           _id: userId
         }, {
@@ -107,6 +108,56 @@ module.exports = (res) => {
       }
     });
 
+    // Chức năng chấp nhận kết bạn
+    socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+
+      // console.log(myUserId); // Id của B
+      // console.log(userId); // Id của A
+
+      // Thêm {user_id, room_chat_id} của A vào friendList của B 
+      // Xoá id của A trong acceptFriends của B
+      const existIdAinB = await User.findOne({
+        _id: myUserId,
+        acceptFriends: userId
+      });
+
+      if(existIdAinB) {
+        await User.updateOne({
+          _id: myUserId
+        }, {
+          $push: {
+            friendList: {
+              user_id: userId,
+              room_chat_id: ""
+            }
+          },
+          $pull: {acceptFriends: userId } 
+        });
+        console.log("hehehee");
+      }
+
+      // Thêm {user_id, room_chat_id} của B vào friendList của A
+      // Xoá id của B trong requestFriends của A
+      const existIdBinA = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId
+      });
+
+      if(existIdBinA) {
+        await User.updateOne({
+          _id: userId
+        }, {
+          $push: {
+            friendList: {
+              user_id: myUserId,
+              room_chat_id: ""
+            }
+          },
+          $pull: {requestFriends: myUserId } 
+        });
+      }
+    });
+
   });
 }
-  
