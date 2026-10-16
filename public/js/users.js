@@ -22,11 +22,28 @@ if(listBtnCancelFriend.length > 0 ){
     button.addEventListener("click" , () => {
       // lấy ra class là 'box-user' và add thêm class là 'add'
       button.closest(".box-user").classList.remove("add");
-      
+
       const userId = button.getAttribute("btn-cancel-friend");
       
       socket.emit("CLIENT_CANCEL_FRIEND", userId);
     });
   });
 }
-// END Chức năng huỷ gửi yêu cầu
+// End Chức năng huỷ gửi yêu cầu
+
+// Chức năng từ chối kết bạn
+// btn-refuse-friend
+const listBtnRefuseFriend = document.querySelectorAll("[btn-refuse-friend]");
+if(listBtnRefuseFriend.length > 0 ){
+  listBtnRefuseFriend.forEach( button => {
+    button.addEventListener("click" , () => {
+      // lấy ra class là 'box-user' và add thêm class là 'add'
+      button.closest(".box-user").classList.add("refuse");
+
+      const userId = button.getAttribute("btn-refuse-friend");
+      
+      socket.emit("CLIENT_REFUSE_FRIEND", userId);
+    });
+  });
+}
+// End Chức năng từ chối kết bạn
