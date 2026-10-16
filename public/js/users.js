@@ -73,7 +73,6 @@ if(badgeUsersAccept){
     if (userId === data.userId) {
         badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
     }
-    
   });
 }
 
